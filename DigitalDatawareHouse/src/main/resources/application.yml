@@ -1,0 +1,14 @@
+spring:
+    application:
+        name: digitaldatawarehouse
+    datasource:
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost/digitaldatawarehouse
+        username: root
+        password: root
+    jpa:
+      hibernate:
+        ddl-auto: create
+          
+server:
+    port: 9000
