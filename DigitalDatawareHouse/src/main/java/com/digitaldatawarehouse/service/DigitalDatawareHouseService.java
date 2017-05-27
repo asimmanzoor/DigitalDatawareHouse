@@ -10,5 +10,6 @@ public interface DigitalDatawareHouseService {
 	public void updateDeal(Deal deal);
 	public void deleteDeal(Deal deal);
 	public void findDeal(Deal deal);
+	public void persistDeals(List<Deal> deals);
 
 }

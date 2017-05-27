@@ -6,16 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digitaldatawarehouse.dao.DigitalDatawareHouseDao;
+import com.digitaldatawarehouse.dao.DigitalDatawareHouseDaoImpl;
 import com.digitaldatawarehouse.model.Deal;
 
 @Service
 public class DigitalDatawareHouseServiceImpl implements DigitalDatawareHouseService {
 
 	@Autowired
+	DigitalDatawareHouseDaoImpl digitalDatawareHouseDaoImpl;
+	@Autowired
 	DigitalDatawareHouseDao digitalDatawareHouseDao;
+
 	@Override
 	public Deal addDeal(Deal deal) {
-		// TODO Auto-generated method stub
+		System.out.println("Inside DAO!!!!");
 		return digitalDatawareHouseDao.save(deal);
 	}
 
@@ -42,6 +46,14 @@ public class DigitalDatawareHouseServiceImpl implements DigitalDatawareHouseServ
 		// TODO Auto-generated method stub
 		//deals.iterator()
 		return	digitalDatawareHouseDao.save(deals);
+		//return digitalDatawareHouseDao.
+	}
+	
+	@Override
+	public void persistDeals(List<Deal> deals) {
+		// TODO Auto-generated method stub
+		//deals.iterator()
+		digitalDatawareHouseDaoImpl.persistBulkData(deals);
 		//return digitalDatawareHouseDao.
 	}
 	

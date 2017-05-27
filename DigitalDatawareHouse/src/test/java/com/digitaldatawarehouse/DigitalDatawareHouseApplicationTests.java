@@ -7,16 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,15 +19,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.digitaldatawarehouse.dao.DigitalDatawareHouseDaoImpl;
 import com.digitaldatawarehouse.model.Deal;
 import com.digitaldatawarehouse.service.DigitalDatawareHouseServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class DigitalDatawareHouseApplicationTests {
+//@Scope(scopeName="prototype")
+public  class DigitalDatawareHouseApplicationTests {
 
 	@Autowired
 	DigitalDatawareHouseServiceImpl digitalDatawareHouseServiceImpl;
+	@Autowired
+	DigitalDatawareHouseDaoImpl digitalDatawareHouseDaoImpl;
+	/*@Autowired
+	DigitalDatawareHouseDaoImpl digitalDatawareHouseDaoImpl;*/
+	
 	@Test
 	public void contextLoads() {
 	}
@@ -102,7 +102,7 @@ public class DigitalDatawareHouseApplicationTests {
 		}*/
 	}
 	
-	@Test
+	//@Test
 	public void writeCSV() {
 		 PrintWriter pw = null;
 		try {
@@ -141,27 +141,16 @@ public class DigitalDatawareHouseApplicationTests {
 	        System.out.println("done!");
 		
 	}
+	
 	@Test
 	public void readCSV() {
 		long start = System.currentTimeMillis();
-		System.out.println(start);
+		//System.out.println(start);
 		List<Deal> deals = processInputCSVFile("/home/asim/digitaldatawarehouse/shared/digitaldatawarehouse.csv");
 		long end = System.currentTimeMillis();
 		System.out.println("Total Time in ms = " + (end - start));
-		long start2 = System.currentTimeMillis();
-		ExecutorService executorService =  Executors.newFixedThreadPool(5);
-		deals.stream().limit(10).forEach( deal ->
-		executorService.execute(() -> {
-			digitalDatawareHouseServiceImpl.addDeal(deal);
-		}));
-		/*deals.parallelStream().forEach(deal -> {
-			
-			digitalDatawareHouseServiceImpl.addDeal(deal);
-		});*/
-		//digitalDatawareHouseServiceImpl.addDeals(deals);
-		long end2 = System.currentTimeMillis();
-		System.out.println("Total Time in to write data in db ms = " + (end2 - start2));
-		
+		digitalDatawareHouseServiceImpl.persistDeals(deals);
+				
 		System.out.println("Total Deal found = " + deals.size());
 	}
 
@@ -183,7 +172,7 @@ public class DigitalDatawareHouseApplicationTests {
 	private Function<String, Deal> mapToItem = (line) -> {
 		  String[] p = line.split(",");// a CSV has comma separated lines
 		  Deal deal = new Deal();
-		  deal.setDealId(Long.parseLong(p[0]));
+		  //deal.setDealId(Long.parseLong(p[0]));
 		  deal.setOrdringCurrency(p[1]);
 		  deal.setTocurrencyISOcode(p[2]);
 		  deal.setTimestamp(new Date());

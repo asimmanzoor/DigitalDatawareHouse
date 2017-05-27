@@ -48,7 +48,8 @@ public class Deal {
 	public void setTocurrencyISOcode(String tocurrencyISOcode) {
 		this.tocurrencyISOcode = tocurrencyISOcode;
 	}
-	@Override
+	
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -88,5 +89,5 @@ public class Deal {
 			return false;
 		return true;
 	}
-
+*/
 }
