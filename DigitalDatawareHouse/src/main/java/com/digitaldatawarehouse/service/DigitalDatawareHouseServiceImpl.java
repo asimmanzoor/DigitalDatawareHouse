@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.digitaldatawarehouse.dao.DigitalDatawareHouseDao;
 import com.digitaldatawarehouse.dao.DigitalDatawareHouseDaoImpl;
-import com.digitaldatawarehouse.model.Deal;
+import com.digitaldatawarehouse.model.DealDetails;
+import com.digitaldatawarehouse.model.DealDetailsValidRows;
 
 @Service
 public class DigitalDatawareHouseServiceImpl implements DigitalDatawareHouseService {
@@ -18,31 +19,31 @@ public class DigitalDatawareHouseServiceImpl implements DigitalDatawareHouseServ
 	DigitalDatawareHouseDao digitalDatawareHouseDao;
 
 	@Override
-	public Deal addDeal(Deal deal) {
+	public DealDetailsValidRows addDeal(DealDetailsValidRows deal) {
 		System.out.println("Inside DAO!!!!");
 		return digitalDatawareHouseDao.save(deal);
 	}
 
 	@Override
-	public void updateDeal(Deal deal) {
+	public void updateDeal(DealDetailsValidRows deal) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void deleteDeal(Deal deal) {
+	public void deleteDeal(DealDetailsValidRows deal) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void findDeal(Deal deal) {
+	public void findDeal(DealDetailsValidRows deal) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Iterable<Deal> addDeals(List<Deal> deals) {
+	public Iterable<DealDetailsValidRows> addDeals(List<DealDetailsValidRows> deals) {
 		// TODO Auto-generated method stub
 		//deals.iterator()
 		return	digitalDatawareHouseDao.save(deals);
@@ -50,7 +51,7 @@ public class DigitalDatawareHouseServiceImpl implements DigitalDatawareHouseServ
 	}
 	
 	@Override
-	public void persistDeals(List<Deal> deals) {
+	public void persistDeals(List<DealDetails> deals) {
 		// TODO Auto-generated method stub
 		//deals.iterator()
 		digitalDatawareHouseDaoImpl.persistBulkData(deals);

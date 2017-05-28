@@ -2,14 +2,16 @@ package com.digitaldatawarehouse.service;
 
 import java.util.List;
 
-import com.digitaldatawarehouse.model.Deal;
+import com.digitaldatawarehouse.model.DealDetails;
+import com.digitaldatawarehouse.model.DealDetailsValidRows;
 
 public interface DigitalDatawareHouseService {
-	public Deal addDeal(Deal deal);
-	public Iterable<Deal> addDeals(List<Deal> deal);
-	public void updateDeal(Deal deal);
-	public void deleteDeal(Deal deal);
-	public void findDeal(Deal deal);
-	public void persistDeals(List<Deal> deals);
+	public DealDetailsValidRows addDeal(DealDetailsValidRows deal);
+	public Iterable<DealDetailsValidRows> addDeals(List<DealDetailsValidRows> deal);
+	public void updateDeal(DealDetailsValidRows deal);
+	public void deleteDeal(DealDetailsValidRows deal);
+	public void findDeal(DealDetailsValidRows deal);
+	public void persistDeals(List<DealDetails> deals);
+	//void persistDeals(List<DealDetails> deals);
 
 }

@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import com.digitaldatawarehouse.model.Deal;
+import com.digitaldatawarehouse.model.DealDetails;
 @Repository
 public class DataPersistJPAManager {
 	
@@ -21,7 +21,7 @@ public class DataPersistJPAManager {
 	@Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
 	private int batchSize;
 	@Transactional 
-	public <T extends Deal> Collection<T> bulkSave(Collection<T> entities) {
+	public <T extends DealDetails> Collection<T> bulkSave(Collection<T> entities) {
 	  final List<T> savedEntities = new ArrayList<T>(entities.size());
 	  int i = 0;
 	  for (T t : entities) {
@@ -36,7 +36,7 @@ public class DataPersistJPAManager {
 	  return savedEntities;
 	}
 	@Transactional  
-	private <T extends Deal> T persistOrMerge(T t) {
+	private <T extends DealDetails> T persistOrMerge(T t) {
 		try {
 			
 			if (t.getDealId() == null) {

@@ -20,7 +20,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.digitaldatawarehouse.dao.DigitalDatawareHouseDaoImpl;
-import com.digitaldatawarehouse.model.Deal;
+import com.digitaldatawarehouse.model.DealDetails;
+import com.digitaldatawarehouse.model.DealDetailsInValidRows;
+import com.digitaldatawarehouse.model.DealDetailsValidRows;
 import com.digitaldatawarehouse.service.DigitalDatawareHouseServiceImpl;
 
 @RunWith(SpringRunner.class)
@@ -40,12 +42,12 @@ public  class DigitalDatawareHouseApplicationTests {
 	}
 	//@Test
 	public void saveDeal() {
-		Deal deal = new Deal();
+		DealDetailsValidRows deal = new DealDetailsValidRows();
 		//deal.setDealId("1");
 		deal.setDealAmount(41.2);
-		deal.setOrdringCurrency("doller");
+		deal.setOrderingCurrency("doller");
 		deal.setTimestamp(new Date());
-		Deal d = digitalDatawareHouseServiceImpl.addDeal(deal);
+		DealDetailsValidRows d = digitalDatawareHouseServiceImpl.addDeal(deal);
 		if (d !=null && d.equals(deal)) {
 			System.out.println("Data Saved!");
 		} else {
@@ -54,12 +56,12 @@ public  class DigitalDatawareHouseApplicationTests {
 	}
 	//@Test
 	public void saveDeal2() {
-		Deal deal = new Deal();
+		DealDetailsValidRows deal = new DealDetailsValidRows();
 		//deal.setDealId("1");
 		deal.setDealAmount(42.4);
-		deal.setOrdringCurrency("doller");
+		deal.setOrderingCurrency("doller");
 		deal.setTimestamp(new Date());
-		Deal d = digitalDatawareHouseServiceImpl.addDeal(deal);
+		DealDetailsValidRows d = digitalDatawareHouseServiceImpl.addDeal(deal);
 		if (d !=null && d.equals(deal)) {
 			System.out.println("Data Saved!");
 		} else {
@@ -69,29 +71,29 @@ public  class DigitalDatawareHouseApplicationTests {
 	
 	//@Test
 	public void saveDeals() {
-		Deal deal = new Deal();
+		DealDetailsValidRows deal = new DealDetailsValidRows();
 		//deal.setDealId("1");
 		deal.setDealAmount(43.4);
-		deal.setOrdringCurrency("doller");
+		deal.setOrderingCurrency("doller");
 		deal.setTimestamp(new Date());
-		Deal deal2 = new Deal();
+		DealDetailsValidRows deal2 = new DealDetailsValidRows();
 		//deal.setDealId("1");
 		deal2.setDealAmount(45.4);
-		deal2.setOrdringCurrency("doller");
+		deal2.setOrderingCurrency("doller");
 		deal2.setTimestamp(new Date());
-		Deal deal3 = new Deal();
+		DealDetailsValidRows deal3 = new DealDetailsValidRows();
 		//deal.setDealId("1");
 		deal3.setDealAmount(46.4);
-		deal3.setOrdringCurrency("doller");
+		deal3.setOrderingCurrency("doller");
 		deal3.setTimestamp(new Date());
-		List<Deal> deals = new ArrayList<Deal>();
+		List<DealDetailsValidRows> deals = new ArrayList<DealDetailsValidRows>();
 		deals.add(deal);
 		deals.add(deal2);
 		deals.add(deal3);
 		
 		
 		
-		Iterable<Deal> dItr = digitalDatawareHouseServiceImpl.addDeals(deals);
+		Iterable<DealDetailsValidRows> dItr = digitalDatawareHouseServiceImpl.addDeals(deals);
 		System.out.println("List Saved!!");
 		//dItr.forEach(action);
 		
@@ -146,7 +148,7 @@ public  class DigitalDatawareHouseApplicationTests {
 	public void readCSV() {
 		long start = System.currentTimeMillis();
 		//System.out.println(start);
-		List<Deal> deals = processInputCSVFile("/home/asim/digitaldatawarehouse/shared/digitaldatawarehouse.csv");
+		List<DealDetails> deals = processInputCSVFile("/home/asim/digitaldatawarehouse/shared/digitaldatawarehouse.csv");
 		long end = System.currentTimeMillis();
 		System.out.println("Total Time in ms = " + (end - start));
 		digitalDatawareHouseServiceImpl.persistDeals(deals);
@@ -154,8 +156,8 @@ public  class DigitalDatawareHouseApplicationTests {
 		System.out.println("Total Deal found = " + deals.size());
 	}
 
-	private List<Deal> processInputCSVFile(String inputFilePath) {
-	    List<Deal> inputList = new ArrayList<Deal>();
+	private List<DealDetails> processInputCSVFile(String inputFilePath) {
+	    List<DealDetails> inputList = new ArrayList<DealDetails>();
 	    try{
 	      File inputF = new File(inputFilePath);
 	      InputStream inputFS = new FileInputStream(inputF);
@@ -168,14 +170,24 @@ public  class DigitalDatawareHouseApplicationTests {
 	    }
 	    return inputList ;
 	}
-	@SuppressWarnings("deprecation")
-	private Function<String, Deal> mapToItem = (line) -> {
+	private Function<String, DealDetails> mapToItem = (line) -> {
 		  String[] p = line.split(",");// a CSV has comma separated lines
-		  Deal deal = new Deal();
+		  DealDetails deal = null;
 		  //deal.setDealId(Long.parseLong(p[0]));
-		  deal.setOrdringCurrency(p[1]);
-		  deal.setTocurrencyISOcode(p[2]);
-		  deal.setTimestamp(new Date());
+		  if (Long.parseLong(p[0])% 4 ==0) {
+			  deal = new DealDetailsInValidRows();
+			  ((DealDetailsInValidRows) deal).setOrderingCurrency(p[1]);
+			  ((DealDetailsInValidRows) deal).setTocurrencyISOcode(p[2]);
+			  ((DealDetailsInValidRows) deal).setTimestamp(new Date());
+			  ((DealDetailsInValidRows) deal).setDealAmount(Double.parseDouble(p[4]));
+		  } else {
+			  deal = new DealDetailsValidRows();
+			  ((DealDetailsValidRows) deal).setOrderingCurrency(p[1]);
+			  ((DealDetailsValidRows) deal).setTocurrencyISOcode(p[2]);
+			  ((DealDetailsValidRows) deal).setTimestamp(new Date());
+			  ((DealDetailsValidRows) deal).setDealAmount(Double.parseDouble(p[4]));
+		  }
+		  
 	     /*  SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SS");
 	       DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SS");
 	      
@@ -195,7 +207,7 @@ public  class DigitalDatawareHouseApplicationTests {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
-		  deal.setDealAmount(Double.parseDouble(p[4]));
+		  //deal.setDealAmount(Double.parseDouble(p[4]));
 		 // deal.setDealAmount(dealAmount);
 		  
 		  //setItemNumber(p[0]);//<-- this is the first column in the csv file
