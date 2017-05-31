@@ -144,7 +144,7 @@ public  class DigitalDatawareHouseApplicationTests {
 		
 	}
 	
-	@Test
+	//@Test
 	public void readCSV() {
 		long start = System.currentTimeMillis();
 		//System.out.println(start);

@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -43,24 +44,18 @@ public class DigitalDatawareHouseDaoImpl {
 	}
 
 	private void persistValidDealDetails(List<DealDetailsValidRows> deals) {
+		if (deals.size() == 0 ) {
+			return;
+		}
 		List<List<DealDetailsValidRows>> dealList = new ArrayList<List<DealDetailsValidRows>>();
 		ExecutorService executorService = Executors.newWorkStealingPool();
-		if (deals.size() > 40) {
-			
+		// need to check for size more than 0
+		if (deals.size() > 2500) {
+			dealList.addAll(ListUtils.partition(deals, 2500));
+		} else {
+			dealList.addAll(ListUtils.partition(deals, deals.size()));
 		}
-		int start = 0;
-		int end = 2500;
-		// creating sub list of data items
-		try {
-			for (int i = 1; i <= 30; i++) {
-				dealList.add(new ArrayList<DealDetailsValidRows>(deals.subList(start, end)));
-				start = end;
-				end = (2500 * (i + 1));
-			}
-			System.out.println("Size = " + dealList.size());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 		// creating a list of callable
 		List<Callable<Integer>> callables = new ArrayList<Callable<Integer>>(dealList.size());
 		for (int i = 0; i < dealList.size(); i++) {
@@ -94,20 +89,18 @@ public class DigitalDatawareHouseDaoImpl {
 	}
 
 	private void persistInValidDealDetails(List<DealDetailsInValidRows> deals) {
+		if (deals.size() == 0 ) {
+			return;
+		}
 		List<List<DealDetailsInValidRows>> dealList = new ArrayList<List<DealDetailsInValidRows>>();
 		ExecutorService executorService = Executors.newWorkStealingPool();
-		int start = 0;
-		int end = 2500;
 		// creating sub list of data items
-		try {
-			for (int i = 1; i <= 10; i++) {
-				dealList.add(new ArrayList<DealDetailsInValidRows>(deals.subList(start, end)));
-				start = end;
-				end = (2500 * (i + 1));
-			}
-			System.out.println("Size = " + dealList.size());
-		} catch (Exception e) {
-			e.printStackTrace();
+		// make this as property in .yml file so that user can configure 
+		// as per system to get better performance
+		if (deals.size() > 2500) {
+			dealList.addAll(ListUtils.partition(deals, 2500));
+		} else {
+			dealList.addAll(ListUtils.partition(deals, deals.size()));
 		}
 		// creating a list of callable
 		List<Callable<Integer>> callables = new ArrayList<Callable<Integer>>(dealList.size());
