@@ -1,5 +1,9 @@
 package com.digitaldatawarehouse.controller;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,17 +11,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import com.digitaldatawarehouse.model.DealDetails;
+import com.digitaldatawarehouse.service.DigitalDatawareHouseServiceImpl;
+import com.digitaldatawarehouse.utils.DigitalDatawareHouseUtils;
 
 @Controller
 public class UploadController {
 
     //Save the uploaded file to this folder
-    private static String UPLOADED_FOLDER = "/home/asim/temp/";
+    private static String UPLOADED_FOLDER = "d:/temp/";
 
+    @Autowired
+	DigitalDatawareHouseServiceImpl digitalDatawareHouseServiceImpl;
+    
     @GetMapping("/")
     public String index() {
         return "upload";
@@ -34,10 +40,15 @@ public class UploadController {
 
         try {
 
+        	List<DealDetails> deals = DigitalDatawareHouseUtils.processInputCSVFile(file.getInputStream(), file.getOriginalFilename());
+        	digitalDatawareHouseServiceImpl.persistDeals(deals);
+			
+    		System.out.println("Total Deal found = " + deals.size());
             // Get the file and save it somewhere
-            byte[] bytes = file.getBytes();
+            /*byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
             Files.write(path, bytes);
+            */
 
             redirectAttributes.addFlashAttribute("message",
                     "You successfully uploaded '" + file.getOriginalFilename() + "'");
