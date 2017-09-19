@@ -1,0 +1,25 @@
+[
+    {
+      
+        "name": "abc",
+        "address": "New Delhi",
+        "age": 20
+    },
+    
+    {
+        "name": "xyz",
+        "address": "Noida",
+        "age": 22
+    },
+    {
+        "name": "pqr",
+        "address": "Lucknow",
+        "age": 23
+    }
+]
+
+-- Generate SSL Cerificate
+keytool -genkey -alias tomcat -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+
+-- PostgresSql db version is 9.5
+-- 
