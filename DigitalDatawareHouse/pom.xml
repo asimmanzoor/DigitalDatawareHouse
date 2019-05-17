@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>DigitalDatawareHouse</name>
-	<description>Demo project for Spring Boot Jenkins4</description>
+	<description>Demo project for Spring Boot Jenkins5</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
